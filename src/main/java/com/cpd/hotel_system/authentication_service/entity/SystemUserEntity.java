@@ -1,11 +1,7 @@
 package com.cpd.hotel_system.authentication_service.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.Instant;
 
 @Entity
@@ -15,10 +11,10 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemUser {
+public class SystemUserEntity {
 
     @Id
-    @Column(name = "user_id", length = 80, nullable = false)
+    @Column(name = "system_user_id", length = 80, nullable = false)
     private String userId;
 
     @Column(name = "keycloak_id", length = 80, nullable = false)
@@ -59,4 +55,7 @@ public class SystemUser {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @OneToOne(mappedBy = "systemUser")
+    private OTPEntity otp;
 }
