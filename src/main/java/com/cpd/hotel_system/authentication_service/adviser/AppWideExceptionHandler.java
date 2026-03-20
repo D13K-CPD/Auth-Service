@@ -2,6 +2,7 @@ package com.cpd.hotel_system.authentication_service.adviser;
 
 import com.cpd.hotel_system.authentication_service.exception.BadRequestException;
 import com.cpd.hotel_system.authentication_service.exception.EntryNotFoundException;
+import com.cpd.hotel_system.authentication_service.exception.UnAuthorizedException;
 import com.cpd.hotel_system.authentication_service.util.StandardResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,17 @@ public class AppWideExceptionHandler {
                         ex.getMessage(),
                         ex),
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<StandardResponseDTO> handleUnAuthorizedException(EntryNotFoundException ex){
+        return new ResponseEntity<StandardResponseDTO>(
+                new StandardResponseDTO(
+                        401,
+                        ex.getMessage(),
+                        ex),
+                HttpStatus.UNAUTHORIZED
         );
     }
 }
