@@ -54,4 +54,33 @@ public class EmailServiceImpl implements EmailService {
 
         return true;
     }
+
+    @Override
+    public boolean sendHostPassword(String firstName, String toEmail, String subject, String password) throws IOException {
+        String htmlBody = emailTemplateHandler.loadHTMLTemplate("templates/host-init.html");
+
+        htmlBody = htmlBody.replace("${firstName}", firstName);
+        htmlBody = htmlBody.replace("${password}", password);
+        htmlBody = htmlBody.replace("${year}", String.valueOf(Year.now()));
+
+        Email from = new Email(senderEmail);
+        Email to = new Email(toEmail);
+        Content content = new Content("text/html", htmlBody);
+        Mail mail = new Mail(from, subject, to, content);
+
+        SendGrid sendGrid = new SendGrid(apiKey);
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sendGrid.api(request);
+        } catch (IOException e) {
+            System.out.println(e);
+            throw e;
+        }
+
+        return true;
+    }
 }
